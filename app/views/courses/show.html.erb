@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @course.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @course.description %>
+</p>
+
+<%= link_to 'Edit', edit_course_path(@course) %> |
+<%= link_to 'Back', courses_path %>
+
+<table>
+    <tbody>
+        <% @course.course_subjects.each do |course_subject| %>
+            <tr>
+                <td><%= course_subject.subject.title %></td>
+                <td><%= link_to "Remove",course_subject_path(course_subject), class: "btn btn-danger", method: :delete, data: {confirm: "Are you sure to remove this Subject"} %></td>
+            
+                </tr>
+        <% end if @course.subjects.present? %>
+    </tbody>
+</table>
+
+
+<div class="well">
+    <h2 class="text-center">Add Subjects to this course</h2>
+</div>
+
+<%= form_for :add_subject_to_course, url: :add_subject_to_course_courses, method: 'post' do |f| %>
+    <%= f.hidden_field :course_id, value: @course.id %>
+    <div>
+        <p>
+            <%= f.label :select_a_subject%>
+        </p>
+        <p>
+            <%= f.select :subject_id, options_for_select((Subject.all - @course.subjects).collect {|sub| [sub.title, sub.id]}), {prompt: "Select a subject"} %>
+        </p>
+    </div>
+    <div>
+        <p>
+            <%= f.submit "Add this subject to course" %>
+        </p>
+    </div>
+<% end %>

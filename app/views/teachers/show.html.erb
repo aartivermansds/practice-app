@@ -1,0 +1,67 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>First name:</strong>
+  <%= @teacher.first_name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @teacher.last_name %>
+</p>
+
+<p>
+  <strong>Contact:</strong>
+  <%= @teacher.contact %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @teacher.address %>
+</p>
+
+<p>
+  <strong>Age:</strong>
+  <%= @teacher.age %>
+</p>
+
+<p>
+  <strong>Gender:</strong>
+  <%= @teacher.gender %>
+</p>
+
+<%= link_to 'Edit', edit_teacher_path(@teacher) %> |
+<%= link_to 'Back', teachers_path %>
+
+<table>
+    <tbody>
+        <% @teacher.teacher_subjects.each do |teacher_subject| %>
+            <tr>
+                <td><%= teacher_subject.subject.title %></td>
+                <td><%= link_to "Remove",teacher_subject_path(teacher_subject), class: "btn btn-danger", method: :delete, data: {confirm: "Are you sure to remove this Subject"} %></td>
+            
+                </tr>
+        <% end if @teacher.subjects.present? %>
+    </tbody>
+</table>
+
+<div class="well">
+    <h2 class="text-center">Add Subjects to this teacher</h2>
+</div>
+
+<%= form_for :assign_subject_to_teacher, url: :assign_subject_to_teacher_teachers, method: 'post' do |f| %>
+    <%= f.hidden_field :teacher_id, value: @teacher.id %>
+    <div>
+        <p>
+            <%= f.label :select_a_subject%>
+        </p>
+        <p>
+            <%= f.select :subject_id, options_for_select((Subject.all - @teacher.subjects).collect {|sub| [sub.title, sub.id]}), {prompt: "Select a subject"} %>
+        </p>
+    </div>
+    <div>
+        <p>
+            <%= f.submit "Add this subject to teacher" %>
+        </p>
+    </div>
+<% end %>

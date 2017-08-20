@@ -1,4 +1,41 @@
 Rails.application.routes.draw do
+  resources :courses do 
+    collection do 
+      post :add_subject_to_course
+    end
+  end
+  resources :teachers do
+    collection do
+      post :assign_subject_to_teacher
+    end
+  end 
+  resources :courses do
+    collection do
+      post :add_subject_to_course
+    end
+  end
+  resources :course_subjects, only: [:destroy]   
+  resources :teacher_subjects, only: [:destroy]
+  resources :subjects
+  resources :news
+  resources :articles do 
+    # resources :comments do 
+    #   collection do 
+    #     get :new_article_comments
+    #     get :new_news_comments
+    #     post :create_article_comments
+    #     post :create_news_comments
+    #   end
+    # end
+  end
+
+  get 'comments/new_article_comments' => "comments#new_article_comments"
+  get 'comments/new_news_comments' => "comments#new_news_comments"
+  post 'comments/create_article_comments' => "comments#create_article_comments"
+  post 'comments/create_news_comments' => "comments#create_news_comments"
+
+  # post 'courses/add_subject_to_course' => "courses#add_subject_to_course"
+
   root 'home#index'
   resources :authors
   resources :books
